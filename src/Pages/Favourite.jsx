@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import HomeLayout from '../Components/Layout/HomeLayout';
 
 const Favourite = () => {
-  const [favourite, setFavourite] = useState([])
+  const [favourite, setFavourite] = useState([]);
   const [deletedMovie, setDeletedMovie] = useState(null);
 
   useEffect(() => {
@@ -23,21 +23,21 @@ const Favourite = () => {
 
   const removeMovie = async (id, title) => {
     try {
-      let result = await fetch(`http://localhost:8000/api/favourites/${id}`, {
+      let data = await fetch(`http://localhost:8000/api/favourites`, {
         method: 'DELETE',
+        body: JSON.stringify({ id, title }),
+        headers: { 'Content-Type': 'application/json' },
       });
-      let res = await result.json();
 
-      if (res.success) {
-        alert(`${title} is Deleted from Fav`);
+      let response = await data.json();
+      if (response.success) {
         setDeletedMovie(id);
-      } else if (res.error === true || 'true') {
-        alert('Movie not found in favorites');
       } else {
-        alert('Something went wrong');
+        alert(response.msg);
+        return false;
       }
     } catch (error) {
-      console.log(error);
+      alert('Something went wrong');
     }
   };
 
