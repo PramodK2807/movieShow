@@ -11,7 +11,7 @@ const Favourite = () => {
 
   const fetchFavMovies = async () => {
     try {
-      let result = await fetch('http://localhost:8000/api/favourites', {
+      let result = await fetch(`${process.env.REACT_APP_MOVIE_API}`, {
         method: 'GET',
       });
       let res = await result.json();
@@ -23,7 +23,7 @@ const Favourite = () => {
 
   const removeMovie = async (id, title) => {
     try {
-      let data = await fetch(`http://localhost:8000/api/favourites`, {
+      let data = await fetch(`${process.env.REACT_APP_MOVIE_API}`, {
         method: 'DELETE',
         body: JSON.stringify({ id, title }),
         headers: { 'Content-Type': 'application/json' },

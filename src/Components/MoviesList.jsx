@@ -3,23 +3,28 @@ const MovieList = ({ img, title, id, year }) => {
   useEffect(() => {}, []);
 
   const setFavouriteItem = async (img, title, id, year) => {
-    let data = await fetch(`http://localhost:8000/api/favourites`, {
-      method: 'POST',
-      body: JSON.stringify({ img, title, id, year }),
-      headers: { 'Content-Type': 'application/json' },
-    });
+    try {
+      let data = await fetch(`${process.env.REACT_APP_MOVIE_API}`, {
+        method: 'POST',
+        body: JSON.stringify({ img, title, id, year }),
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-    let result = await data.json();
-    if (result.success) {
-      alert(result.msg);
-    } else if (result.error) {
-      alert(result.msg);
+      let result = await data.json();
+      if (result.success) {
+        alert(result.msg);
+      } else if (result.error) {
+        alert(result.msg);
+      }
+    } catch (error) {
+      alert("Smothing went wrong");
+      return false
     }
   };
 
   const deleteFavouriteItem = async (id, title) => {
     try {
-      let data = await fetch(`http://localhost:8000/api/favourites`, {
+      let data = await fetch(`${process.env.REACT_APP_MOVIE_API}`, {
         method: 'DELETE',
         body: JSON.stringify({ id, title }),
         headers: { 'Content-Type': 'application/json' },
@@ -49,7 +54,7 @@ const MovieList = ({ img, title, id, year }) => {
             onClick={() => setFavouriteItem(img, title, id, year)}
             className='w-50 border border-light rounded-pill bg-success text-light fw-bold py-1'
           >
-            Add Fav
+            Fav <span className='text-danger'>&#10084;</span>
           </button>
           <button
             onClick={() => deleteFavouriteItem(id, title)}
