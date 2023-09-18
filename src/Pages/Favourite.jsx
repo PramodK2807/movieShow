@@ -1,53 +1,80 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import HomeLayout from '../Components/Layout/HomeLayout';
-import { useFavourite } from '../Context/Favourite';
 
 const Favourite = () => {
-  const [favourite, setFavourite] = useFavourite();
+  const [favourite, setFavourite] = useState([])
+  const [deletedMovie, setDeletedMovie] = useState(null);
 
-  useEffect(() => {}, [favourite]);
+  useEffect(() => {
+    fetchFavMovies();
+  }, [deletedMovie]);
 
-  const remove = (mid) => {
+  const fetchFavMovies = async () => {
     try {
-      let myFavourite = [...favourite];
-      let index = myFavourite.findIndex((item) => item.id === mid);
-      myFavourite.splice(index, 1);
-      setFavourite(myFavourite);
-      localStorage.setItem('favourite', JSON.stringify(myFavourite));
-    } catch (error) {}
+      let result = await fetch('http://localhost:8000/api/favourites', {
+        method: 'GET',
+      });
+      let res = await result.json();
+      setFavourite(res.data.favourites);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const removeMovie = async (id, title) => {
+    try {
+      let result = await fetch(`http://localhost:8000/api/favourites/${id}`, {
+        method: 'DELETE',
+      });
+      let res = await result.json();
+
+      if (res.success) {
+        alert(`${title} is Deleted from Fav`);
+        setDeletedMovie(id);
+      } else if (res.error === true || 'true') {
+        alert('Movie not found in favorites');
+      } else {
+        alert('Something went wrong');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <HomeLayout>
-      <div className='container my-3'>
-        <div className='container my-5'>
-          <div className='row mx-auto seeall'>
-            {favourite?.length > 0 ? (
-              favourite.map((m) => (
-                <div className='col-md-3 col-6 border'>
-                  <div className='img'>
-                    <img className='w-100 rounded' src={m.img} alt={m.title} />
-                  </div>
-                  <p
-                    className='title fw-bold fs-5 mt-3 text-center text-dark'
-                  >
-                    {m.title}
-                  </p>
-
-                  <button
-                    className='rounded-pill text-light border-success w-100 bg-warning'
-                    onClick={() => remove(m.id)}
-                  >
-                    Remove
-                  </button>
+      <div className='container my-5'>
+        <div className='row'>
+          {favourite && favourite?.length > 0 ? (
+            favourite.map((m) => (
+              <div className='col-lg-3 col-md-4 col-6 border' key={m.id}>
+                <div className='img'>
+                  <img
+                    style={{ height: '350px' }}
+                    className='w-100 rounded'
+                    src={m.img}
+                    alt={m.title}
+                  />
                 </div>
-              ))
-            ) : (
-              <h1 className='text-center'>Your Favourite is Empty</h1>
-            )}
-          </div>
+                <p className='title fw-bold fs-5 mt-3 text-center text-dark'>
+                  {m.title}
+                </p>
+
+                <button
+                  className='rounded-pill text-dark fw-bold py-2 border-success w-100 bg-warning font-size-12 font-size-lg-18 '
+                  onClick={() => removeMovie(m.id, m.title)}
+                >
+                  Remove Fav
+                </button>
+              </div>
+            ))
+          ) : (
+            <h1 className='text-center'>Your Favourite is Empty</h1>
+          )}
         </div>
       </div>
     </HomeLayout>
   );
 };
+
 export default Favourite;

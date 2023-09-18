@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useFavourite } from '../../Context/Favourite';
-
 const Navbar = () => {
-  const [localData] = useFavourite()
   return (
-    <nav className='navbar navbar-expand-md bg-danger fw-bold'>
+    <nav className='navbar navbar-expand bg-danger fw-bold'>
       <div className='container'>
         <Link className='navbar-brand font-size-30 text-light' to='/'>
           MovieShow
@@ -29,7 +26,7 @@ const Navbar = () => {
             </li>
             <li className='nav-item'>
               <Link className='nav-link text-light' to='/favourite'>
-                Favourites <span className='border border-light rounded-pill'>{localData.length}</span>
+                Favourites 
               </Link>
             </li>
           </ul>
