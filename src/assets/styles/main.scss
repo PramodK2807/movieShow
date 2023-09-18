@@ -1,0 +1,212 @@
+// @font-face {
+//   font-family: 'Varela';
+//   src: url('../fonts/Varela_Round/VarelaRound-Regular.ttf');
+// }
+// @font-face {
+//   font-family: 'Raleway';
+//   src: url('../fonts/Raleway/Raleway-VariableFont_wght.ttf');
+// }
+
+:root {
+--primary: #1d5933;
+--bg-color: #20a841;
+--secondary: #5b5b5b;
+--black: #1f1e1e;
+--tertiary: #7c7c7c;
+--grey: #d1d1d1;
+--light-grey: #bebebe;
+--dark-blue: #5c679e;
+--light-green: #f0f2ff;
+--light-voilet: #4057d0;
+--blue-white: #f7f8fd;
+}
+
+.text_tertiary {
+  color: var(--tertiary);
+}
+.text_primary {
+  color: var(--primary);
+}
+.text_black {
+  color: var(--black);
+}
+.text_secondary {
+  color: var(--secondary);
+}
+.light_grey {
+  color: var(--light-grey);
+}
+.text_grey {
+  color: var(--grey);
+}
+.dark_blue {
+  color: var(--dark-blue);
+}
+.blue_white {
+  color: var(--blue-white);
+}
+.fw-500 {
+  font-weight: 500;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Varela', sans-serif;
+}
+
+// .font_family_raleway {
+//   font-family: 'Raleway', sans-serif;
+// }
+
+@import 'bootstrap/scss/bootstrap-utilities';
+
+// We can override bootstrap utilities
+// $display-font-sizes: map-merge(
+//   $display-font-sizes,
+//   (
+//     90: 5rem,
+//   )
+// );
+
+//Generate utilites for Cursor
+$utilities: map-merge(
+  $utilities,
+  (
+    'cursor': (
+      property: cursor,
+      values: auto default pointer wait text move help not-allowed,
+    ),
+  )
+);
+
+// It can make bootstap class(fs-1) responsive (fs-md-2, fd-xl-2,..)
+$utilities: map-merge(
+  $utilities,
+  (
+    'font-size':
+      map-merge(
+        map-get($utilities, 'font-size'),
+        (
+          responsive: true,
+        )
+      ),
+  )
+);
+
+@import 'bootstrap/scss/bootstrap';
+
+$movie-font-sizes: (
+  100: 100px,
+  80: 80px,
+  64: 64px,
+  60: 60px,
+  50: 50px,
+  36: 36px,
+  30: 30px,
+  28: 28px,
+  24: 24px,
+  22: 22px,
+  20: 20px,
+  18: 18px,
+  16: 16px,
+  14: 14px,
+  13: 13px,
+  12: 12px,
+  10: 10px,
+  9: 9px,
+  8: 8px,
+  4: 4px
+);
+
+.shadow{
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+// Generate base font size classes
+@each $size, $value in $movie-font-sizes {
+  .font-size-#{$size} {
+    font-size: $value;
+    /* Add any additional styles you want for the class */
+  }
+}
+
+// Generate responsive variations for each breakpoint
+@each $breakpoint, $min-width in $grid-breakpoints {
+  $breakpoint-abbreviation: str-replace($breakpoint, 'min-', '');
+  @each $size, $value in $movie-font-sizes {
+    .font-size-#{$breakpoint-abbreviation}-#{$size} {
+      @media (min-width: $min-width) {
+        // @extend .fw-bold; // Example: Extend Bootstrap's .fw-bold class
+        font-size: $value;
+        /* Add any additional styles for the responsive class */
+      }
+    }
+  }
+}
+
+// generate classess for width from (1 -100) in %
+@for $i from 1 through 100 {
+  .width-movie-#{$i} {
+    width: unquote('#{$i}%');
+    /* Add any additional styles you want for the class */
+  }
+}
+
+// Generate responsive variations for each breakpoint
+@each $breakpoint, $min-width in $grid-breakpoints {
+  $breakpoint-abbreviation: str-replace($breakpoint, 'min-', '');
+  @for $i from 1 through 100 {
+    .width-movie-#{$breakpoint-abbreviation}-#{$i} {
+      @media (min-width: $min-width) {
+        // @extend .fw-bold; // Example: Extend Bootstrap's .fw-bold class
+        width: unquote('#{$i}%');
+        /* Add any additional styles for the responsive class */
+      }
+    }
+  }
+}
+
+// generate classess for width from (1 -100) in px
+@for $i from 1 through 700 {
+  .width-movie-px-#{$i} {
+    width: $i + px;
+    /* Add any additional styles you want for the class */
+  }
+}
+
+// Generate responsive variations for each breakpoint
+@each $breakpoint, $min-width in $grid-breakpoints {
+  $breakpoint-abbreviation: str-replace($breakpoint, 'min-', '');
+  @for $i from 1 through 700 {
+    .width-movie-px-#{$breakpoint-abbreviation}-#{$i} {
+      @media (min-width: $min-width) {
+        // @extend .fw-bold; // Example: Extend Bootstrap's .fw-bold class
+        width: $i + px;
+        /* Add any additional styles for the responsive class */
+      }
+    }
+  }
+}
+
+// generate classess for height from (1 -100) in px
+@for $i from 1 through 700 {
+  .height-movie-px-#{$i} {
+    height: $i + px;
+    /* Add any additional styles you want for the class */
+  }
+}
+
+// Generate responsive variations for each breakpoint
+@each $breakpoint, $min-width in $grid-breakpoints {
+  $breakpoint-abbreviation: str-replace($breakpoint, 'min-', '');
+  @for $i from 1 through 700 {
+    .height-movie-px-#{$breakpoint-abbreviation}-#{$i} {
+      @media (min-width: $min-width) {
+        // @extend .fw-bold; // Example: Extend Bootstrap's .fw-bold class
+        height: $i + px;
+        /* Add any additional styles for the responsive class */
+      }
+    }
+  }
+}
